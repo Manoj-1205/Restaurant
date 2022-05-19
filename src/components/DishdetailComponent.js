@@ -5,7 +5,7 @@ import {
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { LocalForm, Control, Errors } from 'react-redux-form';
-import { addComment } from '../redux/ActionCreators';
+//import { addComment } from '../redux/ActionCreators';
 import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
 
@@ -13,7 +13,7 @@ const req = (val) => val && val.length;
 const max = (len) => (val) => !(val) || (val.length <= len);
 const min = (len) => (val) => val && (val.length >= len);
 
-function RenderComment({ comments, addComment, dishId }) {
+function RenderComment({ comments, postComment, dishId }) {
 
     if (comments != null) {
         return (
@@ -24,7 +24,7 @@ function RenderComment({ comments, addComment, dishId }) {
                 <p>{comments.comment}</p>
                 <p>--{comments.author},
                     {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(Date.parse(comments.date)))}</p>
-                    <CommentForm dishId={dishId} addComment={addComment} />
+                    <CommentForm dishId={dishId} postComment={postComment} />
             </li>
             
             
@@ -39,10 +39,7 @@ function RenderComment({ comments, addComment, dishId }) {
 
 
 }
-/**
- return(
- )
- * */
+
 class CommentForm extends Component {
 
     constructor(props) {
@@ -62,8 +59,8 @@ class CommentForm extends Component {
     //this.props.dishId + values.rating, values.author, values.comment
     handleSubmit(values) {
         this.toggleModal();
-        alert(JSON.stringify(this.props.dishId +" "+ values.rating + values.author + values.comment));
-        this.props.addComment(this.props.dishId + values.rating);
+        alert(JSON.stringify(this.props.dishId + " " + values.rating + " " + values.author + " " + values.comment));
+        this.props.postComment(this.props.dishId , values.rating , values.author,values.comment);
     }
     render() {
         return (
@@ -207,7 +204,7 @@ const Dishdetail = (props) => {
 
                     <RenderDish dish={props.dish} />
                     <RenderComment comments={props.comments}
-                        addComment={props.addComment}
+                        postComment={props.postComment}
                         dishId={props.dish.id}
                     />
 
@@ -220,7 +217,7 @@ const Dishdetail = (props) => {
 
         );
     else
-        return (<div><h1>Else</h1></div>);
+        return (<div></div>);
         
         }
 
